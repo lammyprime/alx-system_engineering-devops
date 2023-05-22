@@ -1,36 +1,37 @@
 #!/usr/bin/python3
 """
-    Calls to data from the jsonplaceholder website parsed to json formats
-    from task 0, extend your Python script to export data in the JSON format.
+Using https://jsonplaceholder.typicode.com
+gathers data from API and exports it to JSON file
+Implemented using recursion
 """
-if __name__ == "__main__":
-    """
-        Calls to data from the jsonplaceholder website
-        parsed to json formats from task 0, extend your
-        Python script to export data in the JSON format.
-    """
-    import json
-    import requests
-    import sys
+import json
+import re
+import requests
+import sys
 
-    EMPLOYEE_ID = sys.argv[1]
 
-    link = "https://jsonplaceholder.typicode.com/users"
-    userResponse = requests.get(f"{link}/{EMPLOYEE_ID}")
-    EMPLOYEE_NAME = userResponse.json().get("name")
-    fileName = "{}.json".format(EMPLOYEE_ID)
+API = "https://jsonplaceholder.typicode.com"
+"""REST API url"""
 
-    todoList = requests.get(f"{link}/{EMPLOYEE_ID}/todos").json()
 
-    tasks = []
-    for task in todoList:
-        taskDict = {}
-        taskDict["task"] = task.get('title')
-        taskDict["completed"] = task.get('completed')
-        taskDict["username"] = EMPLOYEE_NAME
-        tasks.append(taskDict)
-
-    todoDict = {EMPLOYEE_ID: tasks}
-
-    with open(fileName, "w", newline="") as fd:
-        json.dump(todoDict, fd)
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            id = int(sys.argv[1])
+            user_res = requests.get('{}/users/{}'.format(API, id)).json()
+            todos_res = requests.get('{}/todos'.format(API)).json()
+            user_name = user_res.get('username')
+            todos = list(filter(lambda x: x.get('userId') == id, todos_res))
+            with open("{}.json".format(id), 'w') as json_file:
+                user_data = list(map(
+                    lambda x: {
+                        "task": x.get("title"),
+                        "completed": x.get("completed"),
+                        "username": user_name
+                    },
+                    todos
+                ))
+                user_data = {
+                    "{}".format(id): user_data
+                }
+                json.dump(user_data, json_file)

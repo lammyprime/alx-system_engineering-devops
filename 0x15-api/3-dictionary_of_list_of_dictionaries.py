@@ -1,38 +1,33 @@
 #!/usr/bin/python3
 """
-    Calls all data from the jsonplaceholder website parsed to json formats
-    Using what you did in the task #0, extend your Python
-    script to export data in the JSON format.
+Using https://jsonplaceholder.typicode.com
+gathers data from API and exports it to JSON file
+Implemented using recursion
 """
-if __name__ == "__main__":
-    """
-        Calls all data from the jsonplaceholder website parsed to json
-        formats Using what you did in the task #0, extend your Python
-        script to export data in the JSON format.
-    """
-    import json
-    import requests
-    import sys
+import json
+import requests
 
-    link = "https://jsonplaceholder.typicode.com"
-    fileName = "todo_all_employees.json"
 
-    employeeList = requests.get(f"{link}/users").json()
-    allTodoList = requests.get(f"{link}/todos").json()
+API = "https://jsonplaceholder.typicode.com"
+"""REST API url"""
 
-    todoDict = {}
 
-    for user in employeeList:
-        tasks = []
-        userId = user.get('id')
-        for task in allTodoList:
-            if task.get("userId") == userId:
-                taskDict = {}
-                taskDict["username"] = user.get('username')
-                taskDict["task"] = task.get('title')
-                taskDict["completed"] = task.get('completed')
-                tasks.append(taskDict)
-        todoDict[userId] = tasks
-
-    with open(fileName, "w", newline="") as fd:
-        json.dump(todoDict, fd)
+if __name__ == '__main__':
+    users_res = requests.get('{}/users'.format(API)).json()
+    todos_res = requests.get('{}/todos'.format(API)).json()
+    users_data = {}
+    for user in users_res:
+        id = user.get('id')
+        user_name = user.get('username')
+        todos = list(filter(lambda x: x.get('userId') == id, todos_res))
+        user_data = list(map(
+            lambda x: {
+                'username': user_name,
+                'task': x.get('title'),
+                'completed': x.get('completed')
+            },
+            todos
+        ))
+        users_data['{}'.format(id)] = user_data
+    with open('todo_all_employees.json', 'w') as file:
+        json.dump(users_data, file)

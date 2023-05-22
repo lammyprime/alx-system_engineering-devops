@@ -1,39 +1,33 @@
 #!/usr/bin/python3
 """
-    Calls to data from the jsonplaceholder website parsed to csv formats
-    from task 0, extend your Python script to export data in the CSV format
+Using https://jsonplaceholder.typicode.com
+gathers data from API and exports it to CSV file
+Implemented using recursion
 """
-if __name__ == "__main__":
-    """
-        extend your Python script i task 0 to export data in the CSV format
-    """
+import re
+import requests
+import sys
 
-    import csv
-    import requests
-    import sys
 
-    EMPLOYEE_ID = sys.argv[1]
+API = "https://jsonplaceholder.typicode.com"
+"""REST API url"""
 
-    link = "https://jsonplaceholder.typicode.com/users"
-    userResponse = requests.get(f"{link}/{EMPLOYEE_ID}")
-    EMPLOYEE_NAME = userResponse.json().get("name")
-    fileName = "{}.csv".format(EMPLOYEE_ID)
 
-    todoList = requests.get(f"{link}/{EMPLOYEE_ID}/todos").json()
-    with open(fileName, "w", newline="") as fd:
-        pen = csv.writer(
-                fd,
-                delimiter=',',
-                quotechar='"',
-                quoting=csv.QUOTE_ALL
-            )
-
-        for task in todoList:
-            line = [
-                    EMPLOYEE_ID,
-                    EMPLOYEE_NAME,
-                    task.get('completed'),
-                    task.get('title')
-                ]
-
-            pen.writerow(line)
+if __name__ == '__main__':
+    if len(sys.argv) > 1:
+        if re.fullmatch(r'\d+', sys.argv[1]):
+            id = int(sys.argv[1])
+            user_res = requests.get('{}/users/{}'.format(API, id)).json()
+            todos_res = requests.get('{}/todos'.format(API)).json()
+            user_name = user_res.get('username')
+            todos = list(filter(lambda x: x.get('userId') == id, todos_res))
+            with open('{}.csv'.format(id), 'w') as file:
+                for todo in todos:
+                    file.write(
+                        '"{}","{}","{}","{}"\n'.format(
+                            id,
+                            user_name,
+                            todo.get('completed'),
+                            todo.get('title')
+                        )
+                    )
