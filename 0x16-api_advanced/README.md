@@ -1,12 +1,3 @@
-# 0x16. API advanced
-In this project, I practice with the [Reddit API](https://www.reddit.com/dev/api/)'s many endpoints.  There’s a lot of endpoints available, many that don’t require any form of authentication, and there’s tons of information to be parsed out and presented.
-
-## Learned
-- How to read API documentation to find the endpoints you’re looking for
-- How to use an API with pagination
-- How to parse JSON results from an API
-- How to make a recursive API call
-- How to sort a dictionary by value
-
-## Resources
-+ [Reddit API](https://www.reddit.com/dev/api/)
+# 0x17. Web stack debugging #3
+This was the fourth project in a series of web stack debugging projects. In these projects, I was given broken/bugged webstacks in isolated containers, and asked to fix them to a working state. For each task, I wrote a script automating the commands necessary to fix the
+web stack.
