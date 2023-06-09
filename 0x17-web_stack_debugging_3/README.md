@@ -1,100 +1,103 @@
-V
+# Alx System Engineering (Devops)
 
-0x17. Web stack debugging #3
-DevOpsSysAdminScriptingDebugging
+## Projects
+### [0x00-shell_basics](./0x00-shell_basics)
+| Filename | Description | Command |
+| -------- |:-----------:| -------:|
+| 0-current_working_directory prints the current path |
+| 1-listit | Prints the content of the curremt working directory | ls |
+| 2-bring_me_home | Send the user to home | cd ~ |
+| 3-listfiles | Prints pwd files in long format | ls -l |
+| 4-listmorefiles | Lists files in the long format, including hidden ones | ls -a |
+| 5-listfilesdigitonly | Lists the files with group id displayed numerically | ls -an |
+| 6-firstdirectory | Creates a directory in the specified folder | mkdir |
+| 7-movethatfile | Moves betty like a gentleman | mv |
+| 8-firstdelete | Deletes a file from a location | rm |
+| 9-firstdirdeletion | Deletes a folder | rmdir |
+| 10-back | Goes to the previous directory | cd .. |
+| 11-lists | Gives files in root and /boot | ls -al |
+| 12-filetype | Checks the kind of file iamafile is | file |
+| 13-symbolic_link | Directs to another file at specified location | ln -s |
+| 14-copy_html | Copies html files using wildcards | * |
 
-    By: Sylvain Kalache, co-founder at Holberton School
-    Weight: 1
-    Project will start Jun 6, 2023 6:00 AM, must end by Jun 8, 2023 6:00 AM
-    Checker will be released at Jun 7, 2023 1:12 PM
-    An auto review will be launched at the deadline
+---------------------------------------------------------------
 
-Concepts
+### [0x01-shell_permissions](./0x01-shell_permissions)
+Using shell executeables to perform commands
+| Filename | Command |
+| -------- | -------:|
+| 0-iam_betty | su |
+| 100-change_owner_and_group | chown -R |
+| 101-symbolic_link_permissions | chown -h |
+| 102-if_only | chown |
+| 103-Star_Wars | telnet |
+| 10-mirror_permissions | chmod |
+| 11-directories_permissions | chmod -R |
+| 12-directory_permissions | chmod - R |
+| 13-change_group | chgrp |
+| 1-who_am_i | whoami |
+| 2-groups | groups |
+| 3-new_owner | chown |
+| 4-empty | touch |
+| 5-execute | chmod |
+| 6-multiple_permissions | chmod nnn |
+| 7-everybody | chmod ugo+x |
+| 8-James_Bond | chmod 007 |
+| 9-John_Doe | chmod 753 |
 
-For this project, we expect you to look at these concepts:
+-------------------------------------------------------------
 
-    Web Server
-    Web stack debugging
+### [0x02-shell_redirections](./0x02-shell_redirections)
+Using shell commands to display and manipulate files
+##### Related COmmands
+- echo "Hello, World"
+- find . -empty|rev|cut -d "/" -f 1|rev
+- find . -type f -name "*.gif"  -printf '%f\n' | rev | cut --complement -d . -f 1 | rev | LC_ALL=C sort -f
+- echo $(cut -c 1 |tr -d '\n')
+- tail -n +2 | cut -f 1 | sort | uniq -c | sort -nrk 1 | rev | cut -d " " -f 1 | rev | head -n 11
+- find -mindepth 0 -type f -name "*.js"  -delete
+- find . -mindepth 1 -type d | wc -l
+- ls -1t | head
+- sort | uniq -u
+- grep root /etc/passwd
+- grep bin /etc/passwd | wc -l
+- grep -A 3 root /etc/passwd
+- grep -v bin /etc/passwd
+- grep -i ^[[:alpha:]] /etc/ssh/sshd_config
+- tr A Z|tr c e
+- echo "\"(Ôo)'"
+- tr -d c|tr -d C
+- rev
+- cut -d ":" -f 1,6 /etc/passwd |sort -d
+- cat /etc/passwd
+- cat /etc/passwd /etc/hosts
+- tail /etc/passwd
+- head /etc/passwd
+- cat iacta | head -3 | tail -1
+- echo "Best School" > \\\*\\\\\'\"Best\ School\"\\\'\\\\\*\$\\\?\\\*\\\*\\\*\\\*\\\*\:\)
+- ls -la > ls_cwd_content
+- tail -1 iacta>> iacta
 
-Background Context
+-------------------------------------------------------------------------------
 
-When debugging, sometimes logs are not enough. Either because the software is breaking in a way that was not expected and the error is not being logged, or because logs are not providing enough information. In this case, you will need to go down the stack, the good news is that this is something Holberton students can do :)
-
-Wordpress is a very popular tool, it allows you to run blogs, portfolios, e-commerce and company websites… It actually powers 26% of the web, so there is a fair chance that you will end up working with it at some point in your career.
-
-Wordpress is usually run on LAMP (Linux, Apache, MySQL, and PHP), which is a very widely used set of tools.
-
-The web stack you are debugging today is a Wordpress website running on a LAMP stack.
-Requirements
-General
-
-    All your files will be interpreted on Ubuntu 14.04 LTS
-    All your files should end with a new line
-    A README.md file at the root of the folder of the project is mandatory
-    Your Puppet manifests must pass puppet-lint version 2.1.1 without any errors
-    Your Puppet manifests must run without error
-    Your Puppet manifests first line must be a comment explaining what the Puppet manifest is about
-    Your Puppet manifests files must end with the extension .pp
-    Files will be checked with Puppet v3.4
-
-More Info
-Install puppet-lint
-
-$ apt-get install -y ruby
-$ gem install puppet-lint -v 2.1.1
-
-Tasks
-0. Strace is your friend
-mandatory
-
-Using strace, find out why Apache is returning a 500 error. Once you find the issue, fix it and then automate it using Puppet (instead of using Bash as you were previously doing).
-
-Hint:
-
-    strace can attach to a current running process
-    You can use tmux to run strace in one window and curl in another one
-
-Requirements:
-
-    Your 0-strace_is_your_friend.pp file must contain Puppet code
-    You can use whatever Puppet resource type you want for you fix
-
-Example:
-
-root@e514b399d69d:~# curl -sI 127.0.0.1
-HTTP/1.0 500 Internal Server Error
-Date: Fri, 24 Mar 2017 07:32:16 GMT
-Server: Apache/2.4.7 (Ubuntu)
-X-Powered-By: PHP/5.5.9-1ubuntu4.21
-Connection: close
-Content-Type: text/html
-
-root@e514b399d69d:~# puppet apply 0-strace_is_your_friend.pp
-Notice: Compiled catalog for e514b399d69d.ec2.internal in environment production in 0.02 seconds
-Notice: /Stage[main]/Main/Exec[fix-wordpress]/returns: executed successfully
-Notice: Finished catalog run in 0.08 seconds
-root@e514b399d69d:~# curl -sI 127.0.0.1:80
-root@e514b399d69d:~#
-HTTP/1.1 200 OK
-Date: Fri, 24 Mar 2017 07:11:52 GMT
-Server: Apache/2.4.7 (Ubuntu)
-X-Powered-By: PHP/5.5.9-1ubuntu4.21
-Link: <http://127.0.0.1/?rest_route=/>; rel="https://api.w.org/"
-Content-Type: text/html; charset=UTF-8
-
-root@e514b399d69d:~# curl -s 127.0.0.1:80 | grep Holberton
-<title>Holberton &#8211; Just another WordPress site</title>
-<link rel="alternate" type="application/rss+xml" title="Holberton &raquo; Feed" href="http://127.0.0.1/?feed=rss2" />
-<link rel="alternate" type="application/rss+xml" title="Holberton &raquo; Comments Feed" href="http://127.0.0.1/?feed=comments-rss2" />
-        <div id="wp-custom-header" class="wp-custom-header"><img src="http://127.0.0.1/wp-content/themes/twentyseventeen/assets/images/header.jpg" width="2000" height="1200" alt="Holberton" /></div>  </div>
-                            <h1 class="site-title"><a href="http://127.0.0.1/" rel="home">Holberton</a></h1>
-        <p>Yet another bug by a Holberton student</p>
-root@e514b399d69d:~#
-
-Repo:
-
-    GitHub repository: alx-system_engineering-devops
-    Directory: 0x17-web_stack_debugging_3
-    File: 0-strace_is_your_friend.pp
-
-Copyright © 2023 ALX, All rights reserved.
+### [0x03-shell_variables_expansions](./0x03-shell_variables_expansions)
+Using global and local variables
+##### Related Commands
+- alias ls="rm *"
+- echo $(printf "%x" $DECIMAL)
+- tr 'a-zA-Z' 'n-za-mN-ZA-N'
+- paste -d, - - | cut -d, -f1
+- echo $(printf %o $(($((5#$(echo $WATER | tr 'water' '01234'))) + $((5#$(echo $STIR | tr 'stir.' '01234'))))) | tr '01234567' 'bestchol')
+- echo $((($BREATH)**($LOVE)))
+- echo $((2#$BINARY))
+- echo {a..z}{a..z}|tr " " "\n"|grep -v "oo"
+- echo $(printf "%.2f" $NUM)
+- echo hello $USER
+- PATH="$PATH:/action"
+- echo $PATH|tr ':' '\n'|wc -l
+- printenv
+- set
+- BEST="School"
+- export BEST="School"
+- echo $((($TRUEKNOWLEDGE)+128))
+- echo $((($POWER)/($DIVIDE)))
